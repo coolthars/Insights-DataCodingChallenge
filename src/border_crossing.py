@@ -1,3 +1,6 @@
+### Code - Parse Border-Crossing data - summarize data [sum and running-average] on a per-month, border, measure
+### Author - Tharunya Chandrashekar
+
 import sys
 import csv
 import math
@@ -31,6 +34,7 @@ with open(input_file ,"r") as f:
 		measure = x[5]
 		value = int(x[6])
 		yyyy_mm = extract_month_year(date_time)		### Extracting just the month and year
+
 		if yyyy_mm not in border_crossing:				### Initialize any new month/year
 			border_crossing[yyyy_mm] = {}
 		if border_name not in border_crossing[yyyy_mm]:			### Initialize any new border
@@ -43,11 +47,11 @@ with open(input_file ,"r") as f:
 		### Calculating Sum/Value for each month/border/measure
 		border_crossing[yyyy_mm][border_name][measure]['sum_value'] += value
 		border_crossing[yyyy_mm][border_name][measure]['running_average'] = 0	### Initializing running average
-		border_crossing[yyyy_mm]['date_to_disp'] = date_time			### To print in the final output CSV
+		border_crossing[yyyy_mm]['date_to_disp'] = date_time					### To print in the final output CSV
 
 		if border_name not in measures_of_crossing:
 			measures_of_crossing[border_name] = {}
-		if measure not in measures_of_crossing[border_name]: 			### Serves 2 purposes 1. List of all Measures 2. Holds the previous month info
+		if measure not in measures_of_crossing[border_name]: 					### Serves 2 purposes 1. List of all Measures 2. Holds the previous month info
 			measures_of_crossing[border_name][measure] = {}
 			measures_of_crossing[border_name][measure]['previous_months_sum'] = 0
 			measures_of_crossing[border_name][measure]['previous_months_count'] = 0
@@ -57,7 +61,7 @@ with open(input_file ,"r") as f:
 		for border_name in border_crossing[yyyy_mm]:
 			if border_name != 'date_to_disp':
 				for measure in measures_of_crossing[border_name]:
-					if measure not in border_crossing[yyyy_mm][border_name]:		### If a given measure is not used in the current month - then initialize the sum to 0
+					if measure not in border_crossing[yyyy_mm][border_name]:	### If a given measure is not used in the current month - then initialize the sum to 0
 						border_crossing[yyyy_mm][border_name][measure] = {}
 						border_crossing[yyyy_mm][border_name][measure]['sum_value'] = 0
 						border_crossing[yyyy_mm][border_name][measure]['running_average'] = 0
@@ -66,23 +70,23 @@ with open(input_file ,"r") as f:
 					measures_of_crossing[border_name][measure]['previous_months_count'] += 1
 					measures_of_crossing[border_name][measure]['previous_months_sum'] += border_crossing[yyyy_mm][border_name][measure]['sum_value']
 
-	### Writing Output - includes sorting by date, value, measure, boder
-	with open(output_file,'w',newline='\n', encoding='utf-8') as out:
-		print("-Info- Border Crossing Summary output :"+output_file)
-		csv_out = csv.writer(out)
-		csv_out.writerow(['Border','Date','Measure','Value','Average'])
-		for yyyy_mm in sorted(border_crossing, reverse=True):
-			list_for_sort = []
-			for border_name in border_crossing[yyyy_mm]:
-				if border_name != 'date_to_disp':
-					for measure in border_crossing[yyyy_mm][border_name]:
-						#Debug Print
-						#print (border_name,border_crossing[yyyy_mm]['date_to_disp'],measure,border_crossing[yyyy_mm][border_name][measure]['sum_value'],border_crossing[yyyy_mm][border_name][measure]['running_average'])
-						list_for_sort.append(tuple([border_name,border_crossing[yyyy_mm]['date_to_disp'],measure,border_crossing[yyyy_mm][border_name][measure]['sum_value'],border_crossing[yyyy_mm][border_name][measure]['running_average']]))
-			sorted_by_sum_val = sorted(list_for_sort, key = lambda tup:tup[4], reverse=True)
-
-			for x in sorted_by_sum_val:
-				if x[3] != 	0:
-					csv_out.writerow(x)
-		out.close()
 f.close()
+### Writing Output - includes sorting by date, value, measure, boder
+with open(output_file,'w',newline='\n', encoding='utf-8') as out:
+	print("-Info- Border Crossing Summary output :"+output_file)
+	csv_out = csv.writer(out)
+	csv_out.writerow(['Border','Date','Measure','Value','Average'])
+	for yyyy_mm in sorted(border_crossing, reverse=True):
+		list_for_sort = []
+		for border_name in border_crossing[yyyy_mm]:
+			if border_name != 'date_to_disp':
+				for measure in border_crossing[yyyy_mm][border_name]:
+					#Debug Print
+					#print (border_name,border_crossing[yyyy_mm]['date_to_disp'],measure,border_crossing[yyyy_mm][border_name][measure]['sum_value'],border_crossing[yyyy_mm][border_name][measure]['running_average'])
+					list_for_sort.append(tuple([border_name,border_crossing[yyyy_mm]['date_to_disp'],measure,border_crossing[yyyy_mm][border_name][measure]['sum_value'],border_crossing[yyyy_mm][border_name][measure]['running_average']]))
+		sorted_by_sum_val = sorted(list_for_sort, key = lambda tup:tup[4], reverse=True)
+
+		for x in sorted_by_sum_val:
+			if x[3] != 	0:
+				csv_out.writerow(x)
+out.close()
