@@ -60,7 +60,7 @@ with open(input_file ,"r") as f:
 					measures_of_crossing[border_name][measure]['previous_months_count'] += 1
 					measures_of_crossing[border_name][measure]['previous_months_sum'] += border_crossing[yyyy_mm][border_name][measure]['sum_value']
 
-	with open(output_file,'w') as out:
+	with open(output_file,'w',newline='\n', encoding='utf-8') as out:
 		csv_out = csv.writer(out)
 		csv_out.writerow(['Border','Date','Measure','Value','Average'])
 		for yyyy_mm in sorted(border_crossing, reverse=True):
