@@ -52,7 +52,6 @@ with open(input_file ,"r") as f:
 			if border_name != 'date_to_disp':
 				for measure in measures_of_crossing[border_name]:
 					if measure not in border_crossing[yyyy_mm][border_name]:		### If a given measure is not used in the current month - then initialize the sum to 0
-						print (yyyy_mm,border_crossing,measure)
 						border_crossing[yyyy_mm][border_name][measure] = {}
 						border_crossing[yyyy_mm][border_name][measure]['sum_value'] = 0
 						border_crossing[yyyy_mm][border_name][measure]['running_average'] = 0
