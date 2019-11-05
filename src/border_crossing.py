@@ -87,6 +87,6 @@ with open(output_file,'w',newline='\n', encoding='utf-8') as out:
 		sorted_by_sum_val = sorted(list_for_sort, key = lambda tup:tup[4], reverse=True)
 
 		for x in sorted_by_sum_val:
-			if x[3] != 	0:
+			if x[3] != 0:
 				csv_out.writerow(x)
 out.close()
