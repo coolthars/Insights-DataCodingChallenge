@@ -73,7 +73,10 @@ with open(input_file ,"r") as f:
 			sorted_by_sum_val = sorted(list_for_sort, key = lambda tup:tup[4], reverse=True)
 
 			for x in sorted_by_sum_val:
-				csv_out.writerow(x)
+				if x[3] != 	0:
+					print (x)
+					csv_out.writerow(x)
+					
 
 
 #csv_out.close()
