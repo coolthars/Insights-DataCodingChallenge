@@ -1,11 +1,13 @@
 import sys
 import csv
+import math
+
 input_file = sys.argv[1]
 output_file= sys.argv[2]
 border_crossing = {}
 measures_of_crossing = {}
 
-def extract_month_year(x):
+def extract_month_year(x):  ### Helper - to extract month and year
 	mm,dd,yyyy_tt = x.split("/")
 	yyyy = yyyy_tt.split(" ")
 	yyyy = str(yyyy[0])
@@ -14,6 +16,10 @@ def extract_month_year(x):
 	year_month = int(year_month)
 	return year_month
 
+def normal_round(n):  	### Helper to overcome python rounding down issue with 0.5 --> 0 instead of 1
+    if n - math.floor(n) < 0.5:
+        return math.floor(n)
+    return math.ceil(n)
 
 
 with open(input_file ,"r") as f:
@@ -56,7 +62,7 @@ with open(input_file ,"r") as f:
 						border_crossing[yyyy_mm][border_name][measure]['sum_value'] = 0
 						border_crossing[yyyy_mm][border_name][measure]['running_average'] = 0
 					if measures_of_crossing[border_name][measure]['previous_months_count'] != 0:		### If the current month is the 1st month - then average = 0 previously initialized
-						border_crossing[yyyy_mm][border_name][measure]['running_average'] = int(round(measures_of_crossing[border_name][measure]['previous_months_sum']/measures_of_crossing[border_name][measure]['previous_months_count']))
+						border_crossing[yyyy_mm][border_name][measure]['running_average'] = int(normal_round(measures_of_crossing[border_name][measure]['previous_months_sum']/measures_of_crossing[border_name][measure]['previous_months_count']))
 					measures_of_crossing[border_name][measure]['previous_months_count'] += 1
 					measures_of_crossing[border_name][measure]['previous_months_sum'] += border_crossing[yyyy_mm][border_name][measure]['sum_value']
 
@@ -76,7 +82,7 @@ with open(input_file ,"r") as f:
 				if x[3] != 	0:
 					print (x)
 					csv_out.writerow(x)
-					
+
 
 
 #csv_out.close()
